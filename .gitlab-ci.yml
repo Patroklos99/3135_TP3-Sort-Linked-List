@@ -7,8 +7,8 @@ before_script:
 
 build:
     stage: build
-#    script:
-#        - make
+    script:
+        - make
 
 #test:
 #    stage: test
