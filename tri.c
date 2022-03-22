@@ -156,6 +156,15 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    fclose(file);
 }
 
+void afficher_mots(struct noeud *ptr) {
+   int a = 0;
+   while (ptr != NULL) {
+      printf("Noeud#%d ->%s\n", a, ptr->mot);
+      ptr = ptr->next;
+      a++;
+   }
+}
+
 void changer_mots(int i, int j_min, char **words) {
    char temp[100];
    strcpy(temp, words[i]);
@@ -173,6 +182,7 @@ void trier_tab(int count, char **words, struct noeud *ptr) {
       if (j_min != i)
          changer_mots(i, j_min, words);
    }
+   afficher_mots(ptr);
 }
 
 void ajout_noeud_fin(struct noeud *tete, char *nbr) {
