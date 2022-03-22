@@ -156,6 +156,18 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    fclose(file);
 }
 
+void ajout_1er_noeud(struct noeud *tete, char **words) {
+   tete->mot = words[0];
+   tete->next = NULL;
+   tete->size = 1;
+}
+
+void init_noeud(char **words, int nb_mots, struct Stats *stats) {
+   struct noeud *tete = malloc(sizeof(struct noeud));
+   struct noeud *ptr = tete;
+   ajout_1er_noeud(tete, words);
+}
+
 int main(int argc, char *argv[]) {
    struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
@@ -163,5 +175,6 @@ int main(int argc, char *argv[]) {
    size_t size = trouver_size_fichier(file, stats);
    char **words = calloc(nb_mots, size * sizeof(char *) + 1);
    lire_lignes(file, words, &nb_mots, stats);
+   init_noeud(words, nb_mots, stats);
    return 0;
 }
