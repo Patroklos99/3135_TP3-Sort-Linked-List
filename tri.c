@@ -142,6 +142,16 @@ void trouver_lettre_frequente(char const **words, struct Stats *stats) {
    }
 }
 
+void liberer_allocs(struct noeud *tete, char **words) {
+   struct noeud *tmp;
+   while (tete != NULL) {
+      tmp = tete;
+      tete = tete->next;
+      free(tmp);
+   }
+   free(words);
+}
+
 void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    int x = 0;
    char ligne[80];
@@ -230,6 +240,7 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    ajout_1er_noeud(tete, words);
    parcourirTabMots(nb_mots, words, tete, ptr, nb_mots);
    compter_lettres(ptr, stats);
+   liberer_allocs(tete, words);
 }
 
 int main(int argc, char *argv[]) {
