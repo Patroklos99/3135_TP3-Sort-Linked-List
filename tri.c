@@ -243,6 +243,23 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    liberer_allocs(tete, words);
 }
 
+void ecrire_stats(int argc, char *argv[], struct Stats *stats) {
+   if (argc == 4 && strcmp(argv[2], "-S") == 0) {
+      FILE *file = fopen(argv[3], "w");
+      if (file != NULL) {
+         fprintf(file, "Le nb de mots (sans doublons) est: %d.\n",
+                stats->mot_sans_doublons);
+         fprintf(file, "Le nb de mots avec doublons est: %d.\n", stats->mots_totaux);
+         fprintf(file, "Le nb de lignes est: %d.\n", stats->nb_lignes);
+         fprintf(file, "Le nb de lettres des mots (sans doublons) est: %d.\n",
+                stats->nb_lettres);
+         fprintf(file, "La lettre la plus frequente (sans doublons) est: %c, "
+                "apparait %d fois.\n", stats->lettre_frequente, stats->nb_let_freq);
+      }
+      fclose(file);
+   }
+}
+
 int main(int argc, char *argv[]) {
    struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
@@ -251,5 +268,6 @@ int main(int argc, char *argv[]) {
    char **words = calloc(nb_mots, size * sizeof(char *) + 1);
    lire_lignes(file, words, &nb_mots, stats);
    init_noeud(words, nb_mots, stats);
+   ecrire_stats(argc, argv, stats);
    return 0;
 }
