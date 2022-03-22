@@ -156,6 +156,46 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    fclose(file);
 }
 
+void changer_mots(int i, int j_min, char **words) {
+   char temp[100];
+   strcpy(temp, words[i]);
+   strcpy(words[i], words[j_min]);
+   strcpy(words[j_min], temp);
+}
+
+void trier_tab(int count, char **words, struct noeud *ptr) {
+   for (int i = 0; i < count - 1; ++i) {
+      int j_min = i;
+      for (int j = i + 1; j < count; ++j) {
+         if (strcmp(words[j], words[j_min]) < 0)
+            j_min = j;
+      }
+      if (j_min != i)
+         changer_mots(i, j_min, words);
+   }
+}
+
+void ajout_noeud_fin(struct noeud *tete, char *nbr) {
+   struct noeud *ptr, *temp;
+   ptr = tete;
+   temp = malloc(sizeof(struct noeud));
+   temp->mot = nbr;
+   temp->next = NULL;
+   while (ptr->next != NULL)
+      ptr = ptr->next;
+   ptr->next = temp;
+   tete->size++;
+}
+
+void parcourirTabMots(int count, char **words, struct noeud *tete, struct noeud *ptr,
+                 int nb_mots) {
+   for (int i = 1; i <= count; ++i) {
+      if (words[i] != 0)
+         ajout_noeud_fin(tete, words[i]);
+   }
+   trier_tab(nb_mots, words, ptr);
+}
+
 void ajout_1er_noeud(struct noeud *tete, char **words) {
    tete->mot = words[0];
    tete->next = NULL;
@@ -166,6 +206,7 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    struct noeud *tete = malloc(sizeof(struct noeud));
    struct noeud *ptr = tete;
    ajout_1er_noeud(tete, words);
+   parcourirTabMots(nb_mots, words, tete, ptr, nb_mots);
 }
 
 int main(int argc, char *argv[]) {
