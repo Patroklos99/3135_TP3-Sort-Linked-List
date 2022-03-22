@@ -75,10 +75,29 @@ FILE *lire_fichier(char **argv, int argc) {
    return file;
 }
 
+void compter_lignes(FILE *file, struct Stats *stats) {
+   int compteur = 0;
+   char ligne[80];
+   while (fgets(ligne, 80, file)) {
+      compteur++;
+   }
+   stats->nb_lignes = compteur;
+}
+
+size_t trouver_size_fichier(FILE *file, struct Stats *stats) {
+   fseek(file, 0, SEEK_END);
+   size_t size = ftell(file);
+   fseek(file, 0, SEEK_SET);
+   compter_lignes(file, stats);
+   fseek(file, 0, SEEK_SET);
+   return size;
+}
+
 int main(int argc, char *argv[]) {
 	struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
    int nb_mots = trouver_nb_mots(file, stats);
+   size_t size = trouver_size_fichier(file, stats);
 
 }
 
