@@ -45,7 +45,6 @@ void valider_fichier_args(int argc) {
       printf("Trop d'arguments\n");
       exit(0);
    }
-
 }
 
 int trouver_nb_mots(FILE *file, struct Stats *stats) {
@@ -102,6 +101,27 @@ void placermots_tabs(char **words, char *word, int *x) {
    }
 }
 
+void modifier_tab_size(int *b, int *count, char **words) {
+   for (int k = *b; k < *count; k++) {
+      words[k] = words[k + 1];
+      words[*count + 1] = 0;
+   }
+   (*count)--;
+   (*b)--;
+}
+
+void effacer_doublon(int *count, char **words) {
+   for (int a = 0; a < *count; ++a) {
+      if (words[a] != 0) {
+         for (int b = 0; b < *count; ++b) {
+            if (strcmp(words[a], words[b]) == 0 && b != a) {
+               modifier_tab_size(&b, count, words);
+            }
+         }
+      }
+   }
+}
+
 void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    int x = 0;
    char ligne[80];
@@ -109,6 +129,9 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
       char *word;
       word = strdup(strtok(ligne, " ,.-\n"));
       placermots_tabs(words, word, &x);
+   }
+   effacer_doublon(nb_mots, words);
+   stats->mot_sans_doublons = *nb_mots;
 }
 
 int main(int argc, char *argv[]) {
