@@ -5,5 +5,5 @@ test: tri
 html: README.md
 	pandoc -s --self-contained --css=./misc/github-pandoc.css --metadata title=" " README.md -o README.html
 clean: 
-	rm -f *.o *.html 
+	rm -f *.o *.html tri
 
