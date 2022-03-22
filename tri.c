@@ -94,10 +94,11 @@ size_t trouver_size_fichier(FILE *file, struct Stats *stats) {
 }
 
 int main(int argc, char *argv[]) {
-	struct Stats *stats = malloc(sizeof(struct noeud));
+   struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
    int nb_mots = trouver_nb_mots(file, stats);
    size_t size = trouver_size_fichier(file, stats);
+   char **words = calloc(nb_mots, size * sizeof(char *) + 1);
 
 }
 
