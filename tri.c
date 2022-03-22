@@ -93,12 +93,30 @@ size_t trouver_size_fichier(FILE *file, struct Stats *stats) {
    return size;
 }
 
+void placermots_tabs(char **words, char *word, int *x) {
+   while (word != NULL) {
+      //printf("->#%d %s\n", *x, word);
+      words[*x] = word;
+      word = strdup(strtok(NULL, " ,.-\n"));
+      ++(*x);
+   }
+}
+
+void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
+   int x = 0;
+   char ligne[80];
+   while (fgets(ligne, 81, file)) {
+      char *word;
+      word = strdup(strtok(ligne, " ,.-\n"));
+      placermots_tabs(words, word, &x);
+}
+
 int main(int argc, char *argv[]) {
    struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
    int nb_mots = trouver_nb_mots(file, stats);
    size_t size = trouver_size_fichier(file, stats);
    char **words = calloc(nb_mots, size * sizeof(char *) + 1);
-
+   lire_lignes(file, words, &nb_mots, stats);
+   return 0;
 }
-
