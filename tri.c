@@ -212,11 +212,24 @@ void ajout_1er_noeud(struct noeud *tete, char **words) {
    tete->size = 1;
 }
 
+void compter_lettres(struct noeud *ptr, struct Stats *stats) {
+   int nb_lettres = 0;
+   while (ptr != NULL) {
+      for (int i = 0; i < strlen(ptr->mot); ++i) {
+         if (ptr->mot[i] != '\0')
+            nb_lettres++;
+      }
+      ptr = ptr->next;
+   }
+   stats->nb_lettres = nb_lettres;
+}
+
 void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    struct noeud *tete = malloc(sizeof(struct noeud));
    struct noeud *ptr = tete;
    ajout_1er_noeud(tete, words);
    parcourirTabMots(nb_mots, words, tete, ptr, nb_mots);
+   compter_lettres(ptr, stats);
 }
 
 int main(int argc, char *argv[]) {
