@@ -45,6 +45,22 @@ void valider_fichier_args(int argc) {
       printf("Trop d'arguments\n");
       exit(0);
    }
+
+}
+
+int trouver_nb_mots(FILE *file, struct Stats *stats) {
+   int x = 0;
+   char ligne[80];
+   while (fgets(ligne, 81, file)) {
+      char *word;
+      word = strdup(strtok(ligne, " ,.-\n"));
+      while (word != NULL) {
+         word = strdup(strtok(NULL, " ,.-\n"));
+         ++x;
+      }
+   }
+   stats->mots_totaux = x;
+   return x;
 }
 
 /*
@@ -62,5 +78,7 @@ FILE *lire_fichier(char **argv, int argc) {
 int main(int argc, char *argv[]) {
 	struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
+   int nb_mots = trouver_nb_mots(file, stats);
+
 }
 
