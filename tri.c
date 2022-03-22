@@ -122,6 +122,26 @@ void effacer_doublon(int *count, char **words) {
    }
 }
 
+void trouver_lettre_frequente(char const **words, struct Stats *stats) {
+   int array[255] = {0};
+   char str[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+   int i, max;
+   for (int d = 0; d < stats->mot_sans_doublons; ++d) {
+      for (const char *s = words[d]; *s; ++s)
+         ++array[(unsigned char) *s];
+   }
+   max = array[0];
+   int index;
+   for (i = 0; str[i] != 0; i++) {
+      if (array[str[i]] > max) {
+         max = array[str[i]];
+         index = i;
+         stats->lettre_frequente = (char) str[index];
+         stats->nb_let_freq = max;
+      }
+   }
+}
+
 void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    int x = 0;
    char ligne[80];
@@ -132,6 +152,8 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    }
    effacer_doublon(nb_mots, words);
    stats->mot_sans_doublons = *nb_mots;
+   trouver_lettre_frequente((char const **) words, stats);
+   fclose(file);
 }
 
 int main(int argc, char *argv[]) {
