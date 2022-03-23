@@ -106,8 +106,7 @@ void ajout_1er_noeud(struct noeud *tete, char **words) {
    tete->size = 1;
 }
 
-void
-parcourirTabMots(int count, char **words, struct noeud *tete, struct noeud *ptr,
+void iterer_tab_mots(int count, char **words, struct noeud *tete, struct noeud *ptr,
                  int nb_mots) {
    for (int i = 1; i <= count; ++i) {
       if (words[i] != 0)
@@ -133,17 +132,6 @@ void modifier_tab_size(int *b, int *count, char **words) {
    }
    (*count)--;
    (*b)--;
-}
-
-void effacer_doublons(int *count, char **words) {
-   for (int a = 0; a < *count; ++a) {
-      if (words[a] != 0) {
-         for (int b = 0; b < *count; ++b) {
-            if (strcmp(words[a], words[b]) == 0 && b != a)
-               modifier_tab_size(&b, count, words);
-         }
-      }
-   }
 }
 
 void compter_lignes(FILE *file, struct Stats *stats) {
@@ -189,12 +177,23 @@ void trouver_lettre_frequente(char const **words, struct Stats *stats) {
    }
    max = array[0];
    int index;
-   for (i = 0; str[i] != 0; i++) {
+   for (i = 0; (int) str[i] != 0; i++) {
       if (array[(int)str[i]] > max) {
          max = array[(int)str[i]];
          index = i;
          stats->lettre_frequente = (char) str[index];
          stats->nb_let_freq = max;
+      }
+   }
+}
+
+void effacer_doublons(int *count, char **words) {
+   for (int a = 0; a < *count; ++a) {
+      if (words[a] != 0) {
+         for (int b = 0; b < *count; ++b) {
+            if (strcmp(words[a], words[b]) == 0 && b != a)
+               modifier_tab_size(&b, count, words);
+         }
       }
    }
 }
@@ -235,7 +234,7 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    struct noeud *tete = malloc(sizeof(struct noeud));
    struct noeud *ptr = tete;
    ajout_1er_noeud(tete, words);
-   parcourirTabMots(nb_mots, words, tete, ptr, nb_mots);
+   iterer_tab_mots(nb_mots, words, tete, ptr, nb_mots);
    compter_lettres(ptr, stats);
    liberer_allocs(tete, words);
 }
@@ -268,3 +267,4 @@ int main(int argc, char *argv[]) {
    ecrire_stats(argc, argv, stats);
    return 0;
 }
+
