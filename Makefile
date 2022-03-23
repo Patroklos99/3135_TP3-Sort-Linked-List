@@ -1,4 +1,4 @@
-tri: tri.c
+tri:  tri.c 
 	gcc -o tri -Wall -Wextra -std=c11 tri.c
 test: tri
 	bats check.bats
