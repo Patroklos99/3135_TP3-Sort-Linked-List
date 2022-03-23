@@ -106,22 +106,23 @@ void ajout_1er_noeud(struct noeud *tete, char **words) {
    tete->size = 1;
 }
 
-void iterer_tab_mots(int count, char **words, struct noeud *tete, struct noeud *ptr,
-                 int nb_mots) {
-   for (int i = 1; i <= count; ++i) {
+void iterer_tab_mots(int nb_mots, char **words, struct noeud *tete, struct noeud *ptr) {
+   for (int i = 1; i < nb_mots; ++i) {
       if (words[i] != 0)
          ajout_noeud_fin(tete, words[i]);
    }
    trier_tab(nb_mots, words, ptr);
 }
 
-void liberer_allocs(struct noeud *tete, char **words) {
+void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
    struct noeud *tmp;
    while (tete != NULL) {
       tmp = tete;
       tete = tete->next;
       free(tmp);
    }
+for (int i = 0; i < stats->mots_totaux; ++i)
+      free(words[i]);
    free(words);
 }
 
@@ -146,7 +147,7 @@ void compter_lignes(FILE *file, struct Stats *stats) {
 int trouver_nb_mots(FILE *file, struct Stats *stats) {
    int x = 0;
    char ligne[80];
-   while (fgets(ligne, 81, file)) {
+   while (fgets(ligne, 80, file)) {
       char *word;
       word = strtok(ligne, " ,.-\n");
       while (word != NULL) {
@@ -209,7 +210,7 @@ void placermots_tabs(char ligne[80], char **words, int *i) {
 void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    int i = 0;
    char ligne[80];
-   while (fgets(ligne, 81, file)) {
+   while (fgets(ligne, 80, file)) {
       placermots_tabs(ligne, words,  &i);
    }
    effacer_doublons(nb_mots, words);
@@ -234,9 +235,9 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    struct noeud *tete = malloc(sizeof(struct noeud));
    struct noeud *ptr = tete;
    ajout_1er_noeud(tete, words);
-   iterer_tab_mots(nb_mots, words, tete, ptr, nb_mots);
+   iterer_tab_mots(nb_mots, words, tete, ptr);
    compter_lettres(ptr, stats);
-   liberer_allocs(tete, words);
+   liberer_allocs(tete, words, stats);
 }
 
 void ecrire_stats(int argc, char *argv[], struct Stats *stats) {
@@ -257,14 +258,16 @@ void ecrire_stats(int argc, char *argv[], struct Stats *stats) {
 }
 
 int main(int argc, char *argv[]) {
-   struct Stats *stats = malloc(sizeof(struct noeud));
+   struct Stats *stats = malloc(sizeof(struct noeud) + 1);
    FILE *file = lire_fichier(argv, argc);
    int nb_mots = trouver_nb_mots(file, stats);
    size_t size = trouver_size_fichier(file, stats);
-   char **words = calloc(nb_mots, size * sizeof(char *) + 1);
+   char **words = calloc(nb_mots, size * sizeof(char *));
    lire_lignes(file, words, &nb_mots, stats);
    init_noeud(words, nb_mots, stats);
    ecrire_stats(argc, argv, stats);
+   free(stats);
+	stats = NULL;
    return 0;
 }
 
