@@ -119,9 +119,9 @@ void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
    while (tete != NULL) {
       tmp = tete;
       tete = tete->next;
-      free(tmp);
+      free(tmp);		
    }
-for (int i = 0; i < stats->mots_totaux; ++i)
+   for (int i = 0; i < stats->mots_totaux; ++i)
       free(words[i]);
    free(words);
 }
@@ -258,16 +258,15 @@ void ecrire_stats(int argc, char *argv[], struct Stats *stats) {
 }
 
 int main(int argc, char *argv[]) {
-   struct Stats *stats = malloc(sizeof(struct noeud) + 1);
+   struct Stats *stats = malloc(sizeof(struct noeud));
    FILE *file = lire_fichier(argv, argc);
    int nb_mots = trouver_nb_mots(file, stats);
    size_t size = trouver_size_fichier(file, stats);
    char **words = calloc(nb_mots, size * sizeof(char *));
    lire_lignes(file, words, &nb_mots, stats);
    init_noeud(words, nb_mots, stats);
-   ecrire_stats(argc, argv, stats);
+   ecrire_stats(argc, argv, stats);	
    free(stats);
-	stats = NULL;
    return 0;
 }
 
