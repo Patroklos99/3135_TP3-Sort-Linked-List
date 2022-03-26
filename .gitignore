@@ -5,4 +5,4 @@ entree.txt
 *.txt
 ftest
 *.o
-
+*.out

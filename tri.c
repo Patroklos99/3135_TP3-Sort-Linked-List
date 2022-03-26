@@ -29,10 +29,11 @@ void afficher_mots(struct noeud *ptr) {
 }
 
 void changer_mots(int i, int j_min, char **words) {
-   char temp[100];
-   strcpy(temp, words[i]);
-   strcpy(words[i], words[j_min]);
-   strcpy(words[j_min], temp);
+	char* tmp;
+ 
+   tmp = words[i];
+   words[i] = words[j_min];
+   words[j_min] = tmp;
 }
 
 void trier_tab(int count, char **words, struct noeud *ptr) {
@@ -127,6 +128,7 @@ void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
 }
 
 void modifier_tab_size(int *b, int *count, char **words) {
+   free(words[*b]);
    for (int k = *b; k < *count; k++) {
       words[k] = words[k + 1];
       words[*count + 1] = 0;
