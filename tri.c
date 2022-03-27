@@ -29,14 +29,18 @@ void afficher_mots(struct noeud *ptr) {
 }
 
 void changer_mots(int i, int j_min, char **words) {
-	char* tmp;
- 
+   char* tmp;
    tmp = words[i];
    words[i] = words[j_min];
    words[j_min] = tmp;
+   /*char temp[100];
+   strcpy(temp, words[i]);
+   strcpy(words[i], words[j_min]);
+   strcpy(words[j_min], temp);*/
+
 }
 
-void trier_tab(int count, char **words, struct noeud *ptr) {
+void trier_tab(int count, char **words) {
    for (int i = 0; i < count - 1; ++i) {
       int j_min = i;
       for (int j = i + 1; j < count; ++j) {
@@ -46,7 +50,6 @@ void trier_tab(int count, char **words, struct noeud *ptr) {
       if (j_min != i)
          changer_mots(i, j_min, words);
    }
-   afficher_mots(ptr);
 }
 
 /*
@@ -101,18 +104,12 @@ void ajout_noeud_fin(struct noeud *tete, char *nbr) {
    tete->size++;
 }
 
-void ajout_1er_noeud(struct noeud *tete, char **words) {
-   tete->mot = words[0];
-   tete->next = NULL;
-   tete->size = 1;
-}
-
 void iterer_tab_mots(int nb_mots, char **words, struct noeud *tete, struct noeud *ptr) {
    for (int i = 1; i < nb_mots; ++i) {
       if (words[i] != 0)
          ajout_noeud_fin(tete, words[i]);
    }
-   trier_tab(nb_mots, words, ptr);
+   afficher_mots(ptr);
 }
 
 void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
@@ -120,7 +117,7 @@ void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
    while (tete != NULL) {
       tmp = tete;
       tete = tete->next;
-      free(tmp);		
+      free(tmp);
    }
    for (int i = 0; i < stats->mots_totaux; ++i)
       free(words[i]);
@@ -183,7 +180,7 @@ void trouver_lettre_frequente(char const **words, struct Stats *stats) {
    for (i = 0; (int) str[i] != 0; i++) {
       if (array[(int)str[i]] > max) {
          max = array[(int)str[i]];
-         index = i;
+        index = i;
          stats->lettre_frequente = (char) str[index];
          stats->nb_let_freq = max;
       }
@@ -218,6 +215,7 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    effacer_doublons(nb_mots, words);
    stats->mot_sans_doublons = *nb_mots;
    trouver_lettre_frequente((char const **) words, stats);
+   trier_tab(*nb_mots, words);
    fclose(file);
 }
 
@@ -233,30 +231,41 @@ void compter_lettres(struct noeud *ptr, struct Stats *stats) {
    stats->nb_lettres = nb_lettres;
 }
 
+void ajout_1er_noeud(struct noeud *tete, char **words, int nb_mots, struct noeud
+*ptr, struct Stats *stats) {
+   tete->mot = words[0];
+   tete->next = NULL;
+   tete->size = 1;
+   iterer_tab_mots(nb_mots, words, tete, ptr);
+   compter_lettres(ptr, stats);
+}
+
 void init_noeud(char **words, int nb_mots, struct Stats *stats) {
    struct noeud *tete = malloc(sizeof(struct noeud));
    struct noeud *ptr = tete;
-   ajout_1er_noeud(tete, words);
-   iterer_tab_mots(nb_mots, words, tete, ptr);
-   compter_lettres(ptr, stats);
+   ajout_1er_noeud(tete, words, nb_mots, ptr, stats);
    liberer_allocs(tete, words, stats);
 }
 
-void ecrire_stats(int argc, char *argv[], struct Stats *stats) {
+void ecrire_stats(FILE *file, struct Stats *stats) {
+   fprintf(file, "Le nb de mots (sans doublons) est: %d.\n",
+           stats->mot_sans_doublons);
+   fprintf(file, "Le nb de mots avec doublons est: %d.\n", stats->mots_totaux);
+   fprintf(file, "Le nb de lignes est: %d.\n", stats->nb_lignes);
+   fprintf(file, "Le nb de lettres des mots (sans doublons) est: %d.\n",
+           stats->nb_lettres);
+   fprintf(file, "La lettre la plus frequente (sans doublons) est: %c, "
+                 "apparait %d fois.\n", stats->lettre_frequente, stats->nb_let_freq);
+}
+
+void valider_arg_stats(int argc, char *argv[], struct Stats *stats) {
    if (argc == 4 && strcmp(argv[2], "-S") == 0) {
       FILE *file = fopen(argv[3], "w");
-      if (file != NULL) {
-         fprintf(file, "Le nb de mots (sans doublons) est: %d.\n",
-                 stats->mot_sans_doublons);
-         fprintf(file, "Le nb de mots avec doublons est: %d.\n", stats->mots_totaux);
-         fprintf(file, "Le nb de lignes est: %d.\n", stats->nb_lignes);
-         fprintf(file, "Le nb de lettres des mots (sans doublons) est: %d.\n",
-                 stats->nb_lettres);
-         fprintf(file, "La lettre la plus frequente (sans doublons) est: %c, "
-                       "apparait %d fois.\n", stats->lettre_frequente, stats->nb_let_freq);
-      }
+      if (file != NULL) 
+         ecrire_stats(file, stats);
       fclose(file);
    }
+   free(stats);
 }
 
 int main(int argc, char *argv[]) {
@@ -267,8 +276,8 @@ int main(int argc, char *argv[]) {
    char **words = calloc(nb_mots, size * sizeof(char *));
    lire_lignes(file, words, &nb_mots, stats);
    init_noeud(words, nb_mots, stats);
-   ecrire_stats(argc, argv, stats);	
-   free(stats);
+   valider_arg_stats(argc, argv, stats);
    return 0;
 }
 
+ 
