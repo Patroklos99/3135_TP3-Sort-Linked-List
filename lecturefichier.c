@@ -51,8 +51,9 @@ void valider_arg_invalide(int argc, char **argv) {
  * Valide le nb d'arguments, arrete le programme s'il ny pas d'argument ou s'il y en a trop.
  *
  * @param argc nb d'arguments.
+ * @param argv pointeur vers les arguments.
  * */
-void valider_fichier_args(int argc) {
+void valider_fichier_args(int argc, char **argv) {
    valider_nbr_args(argc, argv);
    valider_arg_invalide(argc, argv);
 }
@@ -61,10 +62,11 @@ void valider_fichier_args(int argc) {
  * Lit le fichier passé en argument.
  *
  * @param argv reference vers le fichier.
+ * @param argc nb d'arguments.
  * */
 FILE *lire_fichier(char **argv, int argc) {
    FILE *file = fopen(argv[1], "r");
-   valider_fichier_args(argc);
+   valider_fichier_args(argc, argv);
    valider_fichier_existe(file);
    return file;
 }
