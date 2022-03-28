@@ -138,7 +138,7 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    effacer_doublons(nb_mots, words);
    stats->mot_sans_doublons = *nb_mots;
    trouver_lettre_frequente((char const **) words, stats);
-  trier_tab(*nb_mots, words);
+   trier_tab(*nb_mots, words);
    fclose(file);
 }
  

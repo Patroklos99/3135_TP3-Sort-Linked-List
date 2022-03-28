@@ -2,7 +2,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "structures.h"
+#include "statistiques.h"
 
 /*
  * Écrit dans le fichier de sortie.
