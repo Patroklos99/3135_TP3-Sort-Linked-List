@@ -23,8 +23,8 @@ void valider_fichier_existe(FILE *file) {
  * @param argc nb d'arguments.
  * */
 void valider_fichier_args(int argc) {
-   if (argc == 1) {
-      printf("Argument manquant\n");
+   if (argc == 1 || argc == 3) {
+      printf("Argument fichier à lire ou à écrire manquant\n");
       exit(0);
    }
    if (argc > 4) {
