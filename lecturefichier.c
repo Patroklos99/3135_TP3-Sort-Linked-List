@@ -21,9 +21,8 @@ void valider_fichier_existe(FILE *file) {
  * Valide le nbre d'arguments.
  *
  * @param argc nb d'arguments.
- * @param argv pointeur vers les arguments..
  * */
-void valider_nbr_args(int argc, char **argv) {
+void valider_nbr_args(int argc) {
    if (argc == 1 || argc == 3) {
       printf("Argument fichier a lire ou a ecrire manquant\n");
       exit(0);
@@ -54,7 +53,7 @@ void valider_arg_invalide(int argc, char **argv) {
  * @param argv pointeur vers les arguments.
  * */
 void valider_fichier_args(int argc, char **argv) {
-   valider_nbr_args(argc, argv);
+   valider_nbr_args(argc);
    valider_arg_invalide(argc, argv);
 }
 
