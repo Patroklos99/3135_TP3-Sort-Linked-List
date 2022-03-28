@@ -18,19 +18,43 @@ void valider_fichier_existe(FILE *file) {
 }
 
 /*
- * Valide le nb d'arguments, arrete le programme s'il ny pas d'argument ou s'il y en a trop.
+ * Valide le nbre d'arguments.
  *
  * @param argc nb d'arguments.
+ * @param argv pointeur vers les arguments..
  * */
-void valider_fichier_args(int argc) {
+void valider_nbr_args(int argc, char **argv) {
    if (argc == 1 || argc == 3) {
-      printf("Argument fichier à lire ou à écrire manquant\n");
+      printf("Argument fichier a lire ou a ecrire manquant\n");
       exit(0);
    }
    if (argc > 4) {
       printf("Trop d'arguments\n");
       exit(0);
    }
+}
+
+/*
+ * Valide argument option -S
+ *
+ * @param argc nb d'arguments.
+ * @param argv pointeur vers les arguments.
+ * */
+void valider_arg_invalide(int argc, char **argv) {
+   if (argc == 4 && strcmp(argv[2], "-S") != 0) {
+      printf("L'option est invalide, essayez avec -S\n");
+      exit(0);
+   }
+}
+
+/*
+ * Valide le nb d'arguments, arrete le programme s'il ny pas d'argument ou s'il y en a trop.
+ *
+ * @param argc nb d'arguments.
+ * */
+void valider_fichier_args(int argc) {
+   valider_nbr_args(argc, argv);
+   valider_arg_invalide(argc, argv);
 }
 
 /*

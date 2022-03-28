@@ -35,8 +35,6 @@ void valider_arg_stats(int argc, char *argv[], struct Stats *stats) {
       if (file != NULL)
          ecrire_stats(file, stats);
       fclose(file);
-   } else if (argc != 2) {
-      printf("Option non valide, essayez avec -S et le nom du fichier.");
-   }
+   } 
    free(stats);
 }
