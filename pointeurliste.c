@@ -7,38 +7,6 @@ const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 #include "pointeurliste.h"
 
 /*
- * Change de place des mots dans leur position correspndante.
- *
- * @param i position reguliere d'iteration sur **words
- * @param j_min Mot alphabetiquement le suivant en relation du précedent.
- * @param words pointeur de pointeur vers leur mot correspondant.
- * */
-void swap_mots(int i, int j_min, char **words) {
-   char *tmp;
-   tmp = words[i];
-   words[i] = words[j_min];
-   words[j_min] = tmp;
-}
-
-/*
- * Trie le pointeur de pointeur (**words).
- *
- * @param nb_mots_update, nombre de mots dans **words updaté.
- * @param words pointeur de pointeur vers leur mot correspondant.
- * */
-void trier_tab(int nb_mots_update, char **words) {
-   for (int i = 0; i < nb_mots_update - 1; ++i) {
-      int j_min = i;
-      for (int j = i + 1; j < nb_mots_update; ++j) {
-         if (strcmp(words[j], words[j_min]) < 0)
-            j_min = j;
-      }
-      if (j_min != i)
-         swap_mots(i, j_min, words);
-   }
-}
-
-/*
  * Trouve la lettre la plus fréquente  dans l'array (sans inclure les doublons).
  *
  * @param array Contient le nombre de répétition de toutes les lettres.
@@ -138,7 +106,6 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    effacer_doublons(nb_mots, words);
    stats->mot_sans_doublons = *nb_mots;
    trouver_lettre_frequente((char const **) words, stats);
-   trier_tab(*nb_mots, words);
    fclose(file);
 }
  

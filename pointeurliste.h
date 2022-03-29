@@ -10,7 +10,5 @@ void modifier_tab_size(int *b, int *nb_mots_update, char **words);
 void trouver_lettre_frequente(char const **words, struct Stats *stats);
 void
 chercher_lettre_freq_array(const int array[255], int max, struct Stats *stats);
-void trier_tab(int nb_mots_update, char **words);
-void swap_mots(int i, int j_min, char **words);
 
 #endif

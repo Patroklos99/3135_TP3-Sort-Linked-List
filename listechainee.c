@@ -48,11 +48,26 @@ void compter_lettres(struct noeud *ptr, struct Stats *stats) {
  *
  * @param ptr pointeur pointe vers la tête de la liste chainée,pour iteration
  * */
-void afficher_mots(struct noeud *ptr) {
+void afficher_mots(struct noeud *tete) {
+   struct noeud *ptr = tete;
    for (int a = 0; ptr != NULL; ++a) {
       printf("%s\n", ptr->mot);
       ptr = ptr->next;
    }
+}
+
+/*
+ * Cherche position correcte à inserer le nouveau noeud
+ *
+ * @param tete struct du 1er noeud de la liste chainée
+ * @param pointeur vers le noeud temporaire avant insertion.
+ * */
+void chercher_position(struct noeud *tete, struct noeud *temp) {
+   struct noeud *cur = tete;
+   while (cur->next != NULL && strcmp(temp->mot, cur->next->mot) >= 0)
+      cur = cur->next;
+   temp->next = cur->next;
+   cur->next = temp;
 }
 
 /*
@@ -61,16 +76,17 @@ void afficher_mots(struct noeud *ptr) {
  * @param tete struct du 1er noeud de la liste chainée
  * @param mot mot correspondant à sa position sur **words.
  * */
-void ajout_noeud_fin(struct noeud *tete, char *mot) {
-   struct noeud *ptr, *temp;
-   ptr = tete;
+struct noeud* ajout_noeud(struct noeud *tete, char *mot) {
+   struct noeud *temp;
    temp = malloc(sizeof(struct noeud));
    temp->mot = mot;
    temp->next = NULL;
-   while (ptr->next != NULL)
-      ptr = ptr->next;
-   ptr->next = temp;
-   tete->size++;
+   if (tete == NULL || strcmp(temp->mot, tete->mot) < 0) {
+      temp->next = tete;
+      return temp;
+   } else
+      chercher_position(tete, temp);
+   return tete;
 }
 
 /*
@@ -79,33 +95,14 @@ void ajout_noeud_fin(struct noeud *tete, char *mot) {
  * @param nb_mots nombre de mots dans le fichier d'entrée.
  * @param words pointeur de pointeur vers leur mot correspondant.
  * @param tete struct du 1er noeud de la liste chainée.
- * @param ptr struct pointe vers la tête de la liste chainée, pour iteration.
  * */
-void iterer_tab_mots(int nb_mots, char **words, struct noeud *tete,
-                     struct noeud *ptr) {
-   for (int i = 1; i < nb_mots; ++i) {
+struct noeud* iterer_tab_mots(int nb_mots, char **words, struct noeud *tete) {
+   for (int i = 0; i < nb_mots; ++i) {
       if (words[i] != 0)
-         ajout_noeud_fin(tete, words[i]);
+         tete = ajout_noeud(tete, words[i]);
    }
-   afficher_mots(ptr);
-}
-
-/*
- * Ajoute le 1er noeud de la liste chainée
- *
- * @param tete struct du 1er noeud de la liste chainée
- * @param words pointeur de pointeur vers leur mot correspondant.
- * @param nb_mots nombre de mots dans le fichier d'entrée.
- * @param ptr struct pointe vers la tête de la liste chainée, pour iteration.
- * @param stats pointeur vers la structure statistiques
- * */
-void ajout_1er_noeud(struct noeud *tete, char **words, int nb_mots, struct noeud
-*ptr, struct Stats *stats) {
-   tete->mot = words[0];
-   tete->next = NULL;
-   tete->size = 1;
-   iterer_tab_mots(nb_mots, words, tete, ptr);
-   compter_lettres(ptr, stats);
+   afficher_mots(tete);
+   return tete;
 }
 
 /*
@@ -116,8 +113,9 @@ void ajout_1er_noeud(struct noeud *tete, char **words, int nb_mots, struct noeud
  * @param stats pointeur vers la structure statistiques
  * */
 void init_noeud(char **words, int nb_mots, struct Stats *stats) {
-   struct noeud *tete = malloc(sizeof(struct noeud));
+   struct noeud *tete = NULL;
+   tete = iterer_tab_mots(nb_mots, words, tete);
    struct noeud *ptr = tete;
-   ajout_1er_noeud(tete, words, nb_mots, ptr, stats);
+   compter_lettres(ptr, stats);
    liberer_allocs(tete, words, stats);
 }
