@@ -9,7 +9,7 @@ lecturefichier.o: lecturefichier.c lecturefichier.h statistiques.o
 	gcc -Wall -Wextra -std=c11 -c lecturefichier.c
 statistiques.o: statistiques.c statistiques.h tri.o
 	gcc -Wall -Wextra -std=c11 -c statistiques.c
-tri.o: tri.c tri.h 
+tri.o: tri.c  
 	gcc -Wall -Wextra -std=c11 -c tri.c
 
 test: link

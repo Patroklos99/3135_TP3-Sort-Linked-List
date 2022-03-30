@@ -5,15 +5,15 @@
 #include <stdlib.h>
 #include "listechainee.h"
 
-/*
- * Libere (alloc. dyn.) tous les noeuds de la liste chainée, les pointeurs
- * dans **words, incluant ce dernier.
- *
- * @param tete struct du 1er noeud de la liste chainée
- * @param words pointeur de pointeur vers leur mot correspondant.
- * @param stats pointeur vers la structure statistiques
- * */
-void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
+Liste *init_liste() {
+   Liste *liste = malloc(sizeof(Liste));
+   liste->first = NULL;
+   liste->size = 0;
+   return liste;
+}
+
+void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats,
+        Liste *liste) {
    struct noeud *tmp;
    while (tete != NULL) {
       tmp = tete;
@@ -23,14 +23,9 @@ void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats) {
    for (int i = 0; i < stats->mots_total; ++i)
       free(words[i]);
    free(words);
+   free(liste);
 }
 
-/*
- * Compte le nb de lettres dans la liste (sans les doublons)
- *
- * @param ptr pointeur pointe vers la tête de la liste chainée, pour iteration.
- * @param stats pointeur vers la structure statistiques
- * */
 void compter_lettres(struct noeud *ptr, struct Stats *stats) {
    int nb_lettres = 0;
    while (ptr != NULL) {
@@ -43,11 +38,6 @@ void compter_lettres(struct noeud *ptr, struct Stats *stats) {
    stats->nb_lettres = nb_lettres;
 }
 
-/*
- * Parcours le liste chainée en affichant le mot correspondant.
- *
- * @param ptr pointeur pointe vers la tête de la liste chainée,pour iteration
- * */
 void afficher_mots(struct noeud *tete) {
    struct noeud *ptr = tete;
    for (int a = 0; ptr != NULL; ++a) {
@@ -56,12 +46,6 @@ void afficher_mots(struct noeud *tete) {
    }
 }
 
-/*
- * Cherche position correcte à inserer le nouveau noeud
- *
- * @param tete struct du 1er noeud de la liste chainée
- * @param pointeur vers le noeud temporaire avant insertion.
- * */
 void chercher_position(struct noeud *tete, struct noeud *temp) {
    struct noeud *cur = tete;
    while (cur->next != NULL && strcmp(temp->mot, cur->next->mot) >= 0)
@@ -70,12 +54,6 @@ void chercher_position(struct noeud *tete, struct noeud *temp) {
    cur->next = temp;
 }
 
-/*
- * Crée et lie le nouveau noeud à la fin de la liste chainée
- *
- * @param tete struct du 1er noeud de la liste chainée
- * @param mot mot correspondant à sa position sur **words.
- * */
 struct noeud* ajout_noeud(struct noeud *tete, char *mot) {
    struct noeud *temp;
    temp = malloc(sizeof(struct noeud));
@@ -89,13 +67,6 @@ struct noeud* ajout_noeud(struct noeud *tete, char *mot) {
    return tete;
 }
 
-/*
- * Itere à travers le pointeur de pointeur **words
- *
- * @param nb_mots nombre de mots dans le fichier d'entrée.
- * @param words pointeur de pointeur vers leur mot correspondant.
- * @param tete struct du 1er noeud de la liste chainée.
- * */
 struct noeud* iterer_tab_mots(int nb_mots, char **words, struct noeud *tete) {
    for (int i = 0; i < nb_mots; ++i) {
       if (words[i] != 0)
@@ -105,17 +76,8 @@ struct noeud* iterer_tab_mots(int nb_mots, char **words, struct noeud *tete) {
    return tete;
 }
 
-/*
- * Initialise le noeud tête et un ptr d'itération.
- *
- * @param words pointeur de pointeur vers leur mot correspondant.
- * @param nb_mots nombre de mots dans le fichier d'entrée.
- * @param stats pointeur vers la structure statistiques
- * */
-void init_noeud(char **words, int nb_mots, struct Stats *stats) {
-   struct noeud *tete = NULL;
-   tete = iterer_tab_mots(nb_mots, words, tete);
-   struct noeud *ptr = tete;
+void init_noeud(char **words, int nb_mots, struct Stats *stats, Liste *liste) {
+   liste->first = iterer_tab_mots(nb_mots, words, liste->first);
+   struct noeud *ptr = liste->first;
    compter_lettres(ptr, stats);
-   liberer_allocs(tete, words, stats);
 }
