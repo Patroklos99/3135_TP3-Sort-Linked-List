@@ -7,3 +7,5 @@ ftest
 *.o
 *.out
 *.gcno
+*.gcda
+test
