@@ -10,3 +10,5 @@ ftest
 *.gcda
 test
 *.gcov
+my.info
+results

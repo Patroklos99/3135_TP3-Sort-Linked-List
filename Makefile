@@ -30,9 +30,11 @@ test:	clean compile_test
 	gcc -Wall -fprofile-arcs -ftest-coverage -o test test.c -lcunit	
 	./test 
 	gcov test.c
+	lcov -c -d . -o my.info
+	genhtml -o results/ my.info
 html: README.md
 	pandoc -s --self-contained --css=./misc/github-pandoc.css --metadata title=" " README.md -o README.html
 clean:
-	rm -f *.o *.html *.gcov *.gcda *.gcno tri test
+	rm -f *.o *.html *.gcov *.gcda *.gcno tri test temp.txt 
 link: compile
 	gcc *.o -o tri

@@ -4,6 +4,41 @@
 #include <stdlib.h>
 #include <CUnit/Basic.h>
 #include "lecturefichier.c"
+#include "statistiques.c"
+
+int stub_arg (int val){
+if (val == 0) {
+   struct Stats *stats = malloc(sizeof(struct Stats));  
+   char* argv[] = {"TEST", "dummy", "-S", "temp.txt"};
+   valider_arg_stats(4, argv, stats);  
+} else {
+   val = 1;
+}
+ return val;
+}
+
+void test_arg_stats_1(void) {
+   CU_ASSERT_NOT_EQUAL(stub_arg(1), 0);  
+}
+
+void test_arg_stats_0(void) {
+   CU_ASSERT_EQUAL(stub_arg(0), 0);  
+}
+
+void test_ecrire_stats_1(void) { 
+    FILE *file = NULL;
+    struct Stats *stats = malloc(sizeof(struct Stats));
+    CU_ASSERT_EQUAL(ecrire_stats(file, stats), 1);
+    free(stats);
+}
+
+void test_ecrire_stats_0(void) { 
+    FILE *file = fopen("temp.txt", "w+");
+    struct Stats *stats = malloc(sizeof(struct Stats));
+    CU_ASSERT_EQUAL(ecrire_stats(file, stats), 0);
+    free(stats);
+    fclose(file);
+}
 
 void test_lire_fichier(void) { 
     FILE *file = fopen("temp.txt", "w+");
@@ -14,11 +49,24 @@ void test_lire_fichier(void) {
     fclose(file);
 }
 
-void test_trouver_nb_mots_0(void) {
+void test_trouver_nb_mots_1(void) {
     FILE *file = fopen("temp.txt", "w+");
+    fprintf(file, "Hello Mike John\n");
     fprintf(file, "Hello Mike John");
     struct Stats *stats = malloc(sizeof(struct Stats));
-    CU_ASSERT_NOT_EQUAL(trouver_nb_mots(file, stats), 3);
+    rewind(file);
+    CU_ASSERT_NOT_EQUAL(trouver_nb_mots(file, stats), 5);
+    fclose(file);
+    free(stats);
+}
+
+void test_trouver_nb_mots_0(void) {
+    FILE *file = fopen("temp.txt", "w+");
+    fprintf(file, "Hello Mike John\n");
+    fprintf(file, "Hello Mike John");
+    struct Stats *stats = malloc(sizeof(struct Stats));
+    rewind(file);
+    CU_ASSERT_EQUAL(trouver_nb_mots(file, stats), 6);
     fclose(file);
     free(stats);
 }
@@ -103,6 +151,7 @@ int main(void) {
     if (CU_initialize_registry() != CUE_SUCCESS)
         errx(EXIT_FAILURE, "can't initialize test registry");
     CU_pSuite facSuite = CU_add_suite("fac", NULL, NULL);
+    CU_pSuite statsSuite = CU_add_suite("stats", NULL, NULL);
     if (CU_get_error() != CUE_SUCCESS)
         errx(EXIT_FAILURE, "%s", CU_get_error_msg());
     CU_add_test(facSuite, "valider_nbr_args0(1)", test_nbr_arg_0);
@@ -119,7 +168,13 @@ int main(void) {
     CU_add_test(facSuite, "trouver_size_fichier(file, stats)", test_trouver_size_0);
     CU_add_test(facSuite, "trouver_size_fichier(file, stats)", test_trouver_size_1);
     CU_add_test(facSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_0);
+    CU_add_test(facSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_1);
     CU_add_test(facSuite, "lire_fichier(argv, 2)", test_lire_fichier);
+    CU_add_test(statsSuite, "ecrire_stats(file, stats)", test_ecrire_stats_0);
+    CU_add_test(statsSuite, "ecrire_stats(file, stats)", test_ecrire_stats_1);
+    CU_add_test(statsSuite, "stub_arg", test_arg_stats_0);
+    CU_add_test(statsSuite, "stub_arg", test_arg_stats_1);
+    CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
     CU_cleanup_registry();
     return 0;
