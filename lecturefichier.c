@@ -5,40 +5,44 @@
 #include <stdlib.h>
 #include "lecturefichier.h"
 
-void valider_fichier_existe(FILE *file) {
-   if (!file) {
-      printf("Fichier n'existe pas\n");
+void arret_prog(int test) {
+   if (test)
       exit(0);
-   }
 }
 
-void valider_nbr_args(int argc) {
+int valider_fichier_existe(FILE *file) {
+   if (!file) 
+      printf("Fichier n'existe pas\n");
+   return !file;
+}
+
+int valider_nbr_args(int argc) {
+   int int_verite = 0;
    if (argc == 1 || argc == 3) {
       printf("Argument fichier a lire ou a ecrire manquant\n");
-      exit(0);
+      int_verite = 1;
    }
    if (argc > 4) {
       printf("Trop d'arguments\n");
-      exit(0);
+      int_verite = 1;
    }
+   return int_verite;
 }
 
-void valider_arg_invalide(int argc, char **argv) {
+int valider_arg_invalide(int argc, char **argv) {
+   int int_verite = 0;
    if (argc == 4 && strcmp(argv[2], "-S") != 0) {
       printf("L'option est invalide, essayez avec -S\n");
-      exit(0);
+      int_verite = 1;
    }
+   return int_verite;
 }
-
-void valider_fichier_args(int argc, char **argv) {
-   valider_nbr_args(argc);
-   valider_arg_invalide(argc, argv);
-}
-
+	
 FILE *lire_fichier(char **argv, int argc) {
    FILE *file = fopen(argv[1], "r");
-   valider_fichier_args(argc, argv);
-   valider_fichier_existe(file);
+   arret_prog(valider_fichier_existe(file));
+   arret_prog(valider_nbr_args(argc));
+   arret_prog(valider_arg_invalide(argc, argv));
    return file;
 }
 

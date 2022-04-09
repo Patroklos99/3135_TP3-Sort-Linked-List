@@ -6,3 +6,4 @@ entree.txt
 ftest
 *.o
 *.out
+*.gcno

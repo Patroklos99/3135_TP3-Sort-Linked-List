@@ -4,6 +4,13 @@
 #include "structures.h"
 
 /*
+ * Arrete le programme dependant de la valeur de verité du param.
+ *
+ * @param test valeur de verité à tester.
+ * */
+void arret_prog(int test);
+
+/*
  * Trouve le nombre de mots dans le fichier d'entrée
  *
  * @param *file pointeur du fichier à lire.
@@ -40,34 +47,29 @@ void compter_lignes(FILE *file, struct Stats *stats);
 FILE *lire_fichier(char **argv, int argc);
 
 /*
- * Valide plusieurs cas d'erreurs;
- *
- * @param argc nb d'arguments.
- * @param argv pointeur vers les arguments.
- * */
-void valider_fichier_args(int argc, char **argv);
-
-/*
  * Valide que le fichier existe, arrete le programme dans le cas contraire.
  *
  * @param *file pointeur vers le fichier à lire.
+ * @return valeur de verité
  * */
-void valider_fichier_existe(FILE *file);
+int valider_fichier_existe(FILE *file);
 
 /*
  * Valide argument option -S
  *
  * @param argc nb d'arguments.
  * @param argv pointeur vers les arguments.
+ * @return valeur de verité
  * */
-void valider_arg_invalide(int argc, char **argv);
+int valider_arg_invalide(int argc, char **argv);
 
 /*
  * Valide le nbre d'arguments.
  *
  * @param argc nb d'arguments.
  * @param argv pointeur vers les arguments..
+ * @return valeur de verité
  * */
-void valider_nbr_args(int argc);
+int valider_nbr_args(int argc);
 
 #endif
