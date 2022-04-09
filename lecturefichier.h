@@ -49,6 +49,7 @@ int compter_lignes(FILE *file);
  *
  * @param argc nb d'arguments.
  * @param argv reference vers le fichier.
+ * @return pointeur vers le fichier cree.
  * */
 FILE *lire_fichier(char **argv, int argc);
 
