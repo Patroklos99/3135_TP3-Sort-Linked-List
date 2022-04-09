@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "structures.h"
-#include "pointeurliste.h"
+#include "debutliste.h"
 #include "lecturefichier.h"
 #include "listechainee.h"
 #include "statistiques.h"

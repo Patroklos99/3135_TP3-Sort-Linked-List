@@ -1,5 +1,5 @@
-#ifndef POINTEURLISTE_H
-#define POINTEURLISTE_H
+#ifndef DEBUTLISTE_H
+#define DEBUTLISTE_H
 #include <stdio.h>
 #include "structures.h"
 

@@ -4,7 +4,7 @@ const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include "pointeurliste.h"
+#include "debutliste.h"
 
 int trouver_lettre_frequente(char const **words, struct Stats *stats) {
    int array[255] = {0};
