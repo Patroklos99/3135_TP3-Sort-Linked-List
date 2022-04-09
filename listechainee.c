@@ -26,7 +26,7 @@ void liberer_allocs(struct noeud *tete, char **words, struct Stats *stats,
    free(liste);
 }
 
-void compter_lettres(struct noeud *ptr, struct Stats *stats) {
+int compter_lettres(struct noeud *ptr) {
    int nb_lettres = 0;
    while (ptr != NULL) {
       for (int i = 0; i < (int) strlen(ptr->mot); ++i) {
@@ -35,7 +35,7 @@ void compter_lettres(struct noeud *ptr, struct Stats *stats) {
       }
       ptr = ptr->next;
    }
-   stats->nb_lettres = nb_lettres;
+   return nb_lettres;
 }
 
 void afficher_mots(struct noeud *tete) {
@@ -79,5 +79,5 @@ struct noeud* iterer_tab_mots(int nb_mots, char **words, struct noeud *tete) {
 void init_noeud(char **words, int nb_mots, struct Stats *stats, Liste *liste) {
    liste->first = iterer_tab_mots(nb_mots, words, liste->first);
    struct noeud *ptr = liste->first;
-   compter_lettres(ptr, stats);
+   stats->nb_lettres = compter_lettres(ptr);
 }

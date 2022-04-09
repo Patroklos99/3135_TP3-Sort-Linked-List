@@ -6,27 +6,21 @@ const char *alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 #include <stdlib.h>
 #include "pointeurliste.h"
 
-void
-chercher_lettre_freq_array(const int array[255], int max, struct Stats *stats) {
-   int index;
-   for (int i = 0; (int) alphabet[i] != 0; i++) {
-      if (array[(int) alphabet[i]] > max) {
-         max = array[(int) alphabet[i]];
-         index = i;
-         stats->lettre_frequente = (char) alphabet[index];
-         stats->nb_let_freq = max;
-      }
-   }
-}
-
-void trouver_lettre_frequente(char const **words, struct Stats *stats) {
+int trouver_lettre_frequente(char const **words, struct Stats *stats) {
    int array[255] = {0};
    int max = array[0];
    for (int d = 0; d < stats->mot_sans_doublons; ++d) {
       for (const char *s = words[d]; *s; ++s)
          ++array[(unsigned char) *s];
    }
-   chercher_lettre_freq_array(array, max, stats);
+   for (int i = 0; (int) alphabet[i] != 0; i++) {
+      if (array[(int) alphabet[i]] > max) {
+         max = array[(int) alphabet[i]];
+         int index = i;
+         stats->lettre_frequente = (char) alphabet[index];
+      }
+   }
+   return max;
 }
 
 void modifier_tab_size(int *b, int *nb_mots_update, char **words) {
@@ -39,7 +33,7 @@ void modifier_tab_size(int *b, int *nb_mots_update, char **words) {
    (*b)--;
 }
 
-void effacer_doublons(int *nb_mots, char **words) {
+int effacer_doublons(int *nb_mots, char **words) {
    for (int i = 0; i < *nb_mots; ++i) {
       if (words[i] != 0) {
          for (int b = 0; b < *nb_mots; ++b) {
@@ -48,6 +42,7 @@ void effacer_doublons(int *nb_mots, char **words) {
          }
       }
    }
+   return *nb_mots;
 }
 
 void placer_mots_tabs(char ligne[80], char **words, int *position) {
@@ -63,9 +58,8 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
    char ligne[80];
    while (fgets(ligne, 80, file))
       placer_mots_tabs(ligne, words, &position);
-   effacer_doublons(nb_mots, words);
-   stats->mot_sans_doublons = *nb_mots;
-   trouver_lettre_frequente((char const **) words, stats);
+   stats->mot_sans_doublons = effacer_doublons(nb_mots, words);
+   stats->nb_let_freq = trouver_lettre_frequente((char const **) words, stats);
    fclose(file);
 }
  

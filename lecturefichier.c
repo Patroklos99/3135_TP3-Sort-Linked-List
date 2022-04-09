@@ -5,60 +5,60 @@
 #include <stdlib.h>
 #include "lecturefichier.h"
 
-void arret_prog(int test) {
-   if (test)
+void arret_prog(int test, char *texte) {
+   if (test) {
+      printf("%s\n", texte);
       exit(0);
+   }
 }
 
 int valider_fichier_existe(FILE *file) {
-   if (!file) 
-      printf("Fichier n'existe pas\n");
    return !file;
 }
 
-int valider_nbr_args(int argc) {
+int valider_nbr_args1(int argc) {
    int int_verite = 0;
-   if (argc == 1 || argc == 3) {
-      printf("Argument fichier a lire ou a ecrire manquant\n");
+   if (argc > 4)
       int_verite = 1;
-   }
-   if (argc > 4) {
-      printf("Trop d'arguments\n");
+   return int_verite;
+}
+
+int valider_nbr_args0(int argc) {
+   int int_verite = 0;
+   if (argc == 1 || argc == 3)
       int_verite = 1;
-   }
    return int_verite;
 }
 
 int valider_arg_invalide(int argc, char **argv) {
    int int_verite = 0;
-   if (argc == 4 && strcmp(argv[2], "-S") != 0) {
-      printf("L'option est invalide, essayez avec -S\n");
+   if (argc == 4 && strcmp(argv[2], "-S") != 0)
       int_verite = 1;
-   }
    return int_verite;
 }
 	
 FILE *lire_fichier(char **argv, int argc) {
    FILE *file = fopen(argv[1], "r");
-   arret_prog(valider_fichier_existe(file));
-   arret_prog(valider_nbr_args(argc));
-   arret_prog(valider_arg_invalide(argc, argv));
+   arret_prog(valider_nbr_args0(argc), err0);
+   arret_prog(valider_fichier_existe(file), err1);
+   arret_prog(valider_nbr_args1(argc), err2);
+   arret_prog(valider_arg_invalide(argc, argv), err3);
    return file;
 }
 
-void compter_lignes(FILE *file, struct Stats *stats) {
-   int compteur = 0;
+int compter_lignes(FILE *file) {
+   int nb_lignes = 0;
    char ligne[80];
    while (fgets(ligne, 80, file))
-      compteur++;
-   stats->nb_lignes = compteur;
+      nb_lignes++;
+   return nb_lignes;
 }
 
 size_t trouver_size_fichier(FILE *file, struct Stats *stats) {
    fseek(file, 0, SEEK_END);
    size_t size = ftell(file);
    fseek(file, 0, SEEK_SET);
-   compter_lignes(file, stats);
+   stats->nb_lignes = compter_lignes(file);
    fseek(file, 0, SEEK_SET);
    return size;
 }

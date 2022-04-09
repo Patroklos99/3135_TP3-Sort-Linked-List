@@ -59,8 +59,9 @@ void afficher_mots(struct noeud *tete);
  *
  * @param ptr pointeur pointe vers la tête de la liste chainée, pour iteration.
  * @param stats pointeur vers la structure statistiques
+ * @return nombre de lettres
  * */
-void compter_lettres(struct noeud *ptr, struct Stats *stats);
+int compter_lettres(struct noeud *ptr);
 
 /*
  * Libere (alloc. dyn.) tous les noeuds de la liste chainée, les pointeurs

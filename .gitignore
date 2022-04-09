@@ -9,3 +9,4 @@ ftest
 *.gcno
 *.gcda
 test
+*.gcov

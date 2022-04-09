@@ -27,8 +27,9 @@ void placer_mots_tabs(char ligne[80], char **words, int *position);
  *
  * @param nb_mots nombre de mots dans le fichier d'entrée.
  * @param words pointeur de pointeur vers leur mot correspondant.
+ * @return Le nouveau nombre de mots appres l'effacage des doublons.
  * */
-void effacer_doublons(int *nb_mots, char **words);
+int effacer_doublons(int *nb_mots, char **words);
 
 /*
  * Modifie la taille du pointeur de pointeurs (**words)
@@ -43,17 +44,8 @@ void modifier_tab_size(int *b, int *nb_mots_update, char **words);
  *
  * @param words pointeur de pointeur vers leur mot correspondant.
  * @param stats pointeur vers la structure statistiques
+ * @return le max de fois que la lettre la plus répétée apparait.
  * */
-void trouver_lettre_frequente(char const **words, struct Stats *stats);
-
-/*
- * Trouve la lettre la plus fréquente  dans l'array (sans inclure les doublons).
- *
- * @param array Contient le nombre de répétition de toutes les lettres.
- * @param max Contient le nombre de répétition de la lettre la plus frequente.
- * @param stats pointeur vers la structure statistiques
- * */
-void
-chercher_lettre_freq_array(const int array[255], int max, struct Stats *stats);
+int trouver_lettre_frequente(char const **words, struct Stats *stats);
 
 #endif
