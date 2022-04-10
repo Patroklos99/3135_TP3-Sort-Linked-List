@@ -27,11 +27,13 @@ tri1.o: tri.c
 	gcc -g -Wall -Wextra --coverage -std=c11 -c tri.c
 
 test:	clean compile_test
-	gcc -Wall -fprofile-arcs -ftest-coverage -o test test.c -lcunit	
+	gcc -g --coverage -o test test.c -lcunit	
 	./test 
+##	valgrind -s --leak-check=full ./test 
 	gcov test.c
-	lcov -c -d . -o my.info
-	genhtml -o results/ my.info
+##	lcov -c -d . -o my.info
+##	genhtml -o results/ my.info
+##	firefox results/inf3135-hiver2022-tp3/index.html
 html: README.md
 	pandoc -s --self-contained --css=./misc/github-pandoc.css --metadata title=" " README.md -o README.html
 clean:

@@ -4,35 +4,129 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <CUnit/Basic.h>
+#include <CUnit/CUnit.h>
 #include "lecturefichier.c"
 #include "statistiques.c"
 #include "debutliste.c"
+#include "listechainee.c"
+
+void test_compter_lettres_1(void) {
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT NEIL OKA");
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
+   stats->mots_total = 3;
+   rewind(file);
+   char **words = calloc(3, 17 * sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   Liste *liste = init_liste();
+   liste->first = iterer_tab_mots(nb_mots, words, liste->first);
+   struct noeud *ptr = liste->first;
+   CU_ASSERT_NOT_EQUAL(compter_lettres(ptr), 12);
+   liberer_allocs(liste->first, words, stats, liste);
+   free(stats);
+}
+
+void test_compter_lettres_0(void) {
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT NEIL OKA");
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
+   stats->mots_total = 3;
+   rewind(file);
+   char **words = calloc(3, 17 * sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   Liste *liste = init_liste();
+   liste->first = iterer_tab_mots(nb_mots, words, liste->first);
+   struct noeud *ptr = liste->first;
+   CU_ASSERT_EQUAL(compter_lettres(ptr), 11);
+   liberer_allocs(liste->first, words, stats, liste);
+   free(stats);
+}
+
+void test_init_noeud_1(void) {
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT MATT OKA");
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
+   stats->mots_total = 3;
+   rewind(file);
+   char **words = calloc(3, 17 * sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   Liste *liste = init_liste();
+   init_noeud(words, nb_mots, stats, liste);
+   CU_ASSERT_NOT_EQUAL(stats->nb_lettres, 8);
+   liberer_allocs(liste->first, words, stats, liste);
+   free(stats);
+}
+
+void test_init_noeud_0(void) {
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT MATT OKA");
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
+   stats->mots_total = 3;
+   rewind(file);
+   char **words = calloc(3, 17 * sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   Liste *liste = init_liste();
+   init_noeud(words, nb_mots, stats, liste);
+   CU_ASSERT_EQUAL(stats->nb_lettres, 7);
+   liberer_allocs(liste->first, words, stats, liste);
+   free(stats);
+}
+
+void test_iter_tab_mots(void){
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT NEIL OKA");
+   struct Stats *stats = malloc(sizeof(struct Stats));  
+   stats->mots_total = 3;
+   rewind(file);
+   char **words = calloc(3, sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   Liste *liste = init_liste();
+   CU_ASSERT_PTR_NOT_NULL_FATAL(liste->first = iterer_tab_mots(nb_mots, words, liste->first));
+   liberer_allocs(liste->first, words, stats, liste);
+   free(stats);
+}
+
+void test_init_liste(void){
+   Liste *ptr = init_liste(); 
+   CU_ASSERT_PTR_NOT_NULL_FATAL(ptr);
+   free(ptr);
+}
 
 void test_lire_lignes(void){
    int nb_mots = 3;
    FILE *file = fopen("temp.txt", "w+");
    fprintf(file, "MATT MATT MIMMIE");
-   struct Stats *stats = malloc(sizeof(struct Stats));  
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
    rewind(file);
-   char **words = calloc(3, sizeof(char *));
+   char **words = calloc(3, 17 * sizeof(char *));
    lire_lignes(file, words, &nb_mots, stats);
    if (NULL != file) {
       CU_ASSERT_NOT_EQUAL(stats->mot_sans_doublons, 0); 
       CU_ASSERT_NOT_EQUAL(stats->nb_let_freq, 0); 
    }
+   for (int i = 0; i < 3; ++i)
+      free(words[i]);
    free(words);
+   free(stats);
 }
 
 
 void test_effacer_doublons_0(void) { 
-    int val = 3;
-    int *val1 = &val;
-    FILE *file = fopen("temp.txt", "w+");
-    fprintf(file, "MATT MATT MIMMIE");
-    rewind(file);
-    char **words = calloc(3, sizeof(char *));
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT MATT MIMMIE");
+   rewind(file);
+   int val = 3;
+   int *val1 = &val;
+   char **words = calloc(3, 17 * sizeof(char *));
     placer_mots_tab(file, words);
-    CU_ASSERT_EQUAL((uintptr_t)effacer_doublons(val1,words), 2);
+    CU_ASSERT_EQUAL(effacer_doublons(val1,words), 2);
+    for (int i = 0; i < 2; ++i)
+      free(words[i]);
     free(words);
     fclose(file);
 }
@@ -43,6 +137,8 @@ void test_placer_mots_tab_0(void) {
     rewind(file);
     char **words = calloc(3, sizeof(char *));
     CU_ASSERT_EQUAL(placer_mots_tab(file, words), 1);
+    for (int i = 0; i < 3; ++i)
+      free(words[i]);
     free(words);
     fclose(file);
 }
@@ -56,6 +152,8 @@ void test_trouver_lettre_freq_0(void) {
     char **words = calloc(3, sizeof(char *));
     placer_mots_tab(file, words);
     CU_ASSERT_EQUAL(trouver_lettre_frequente((char const**)words, stats), 4);
+    for (int i = 0; i < 3; ++i)
+      free(words[i]);
     free(words);
     free(stats); 
     fclose(file);
@@ -63,7 +161,7 @@ void test_trouver_lettre_freq_0(void) {
 
 int stub_arg (int val){
 if (val == 0) {
-   struct Stats *stats = malloc(sizeof(struct Stats));  
+   struct Stats *stats = calloc(1, sizeof(struct Stats));  
    char* argv[] = {"TEST", "dummy", "-S", "temp.txt"};
    valider_arg_stats(4, argv, stats);  
 } else {
@@ -82,14 +180,14 @@ void test_arg_stats_0(void) {
 
 void test_ecrire_stats_1(void) { 
     FILE *file = NULL;
-    struct Stats *stats = malloc(sizeof(struct Stats));
+    struct Stats *stats = calloc(1, sizeof(struct Stats));
     CU_ASSERT_EQUAL(ecrire_stats(file, stats), 1);
     free(stats);
 }
 
 void test_ecrire_stats_0(void) { 
     FILE *file = fopen("temp.txt", "w+");
-    struct Stats *stats = malloc(sizeof(struct Stats));
+    struct Stats *stats = calloc(1, sizeof(struct Stats));
     CU_ASSERT_EQUAL(ecrire_stats(file, stats), 0);
     free(stats);
     fclose(file);
@@ -97,10 +195,10 @@ void test_ecrire_stats_0(void) {
 
 void test_lire_fichier(void) { 
     FILE *file = fopen("temp.txt", "w+");
-    char* argv[] = {"TEST", "temp.txt", "-s", NULL};
-    struct Stats *stats = malloc(sizeof(struct Stats));
-    CU_ASSERT_PTR_NOT_NULL_FATAL(lire_fichier(argv, 2));
-    free(stats);
+    char* argv[] = {"TEST", "temp.txt", "-s", "james"};
+    FILE *ptr = lire_fichier(argv,2);
+    CU_ASSERT_PTR_NOT_NULL_FATAL(ptr);
+    fclose(ptr);
     fclose(file);
 }
 
@@ -208,6 +306,7 @@ int main(void) {
     CU_pSuite lectureSuite = CU_add_suite("lecture", NULL, NULL);
     CU_pSuite statsSuite = CU_add_suite("stats", NULL, NULL);
     CU_pSuite listeSuite = CU_add_suite("liste", NULL, NULL);
+    CU_pSuite listechaineeSuite = CU_add_suite("listechainee", NULL, NULL);
     if (CU_get_error() != CUE_SUCCESS)
         errx(EXIT_FAILURE, "%s", CU_get_error_msg());
     CU_add_test(lectureSuite, "valider_nbr_args0(1)", test_nbr_arg_0);
@@ -234,6 +333,12 @@ int main(void) {
     CU_add_test(listeSuite, "placer_mots_tab(file, words)", test_placer_mots_tab_0);
     CU_add_test(listeSuite, "effacer_doublons(&val, words)", test_effacer_doublons_0);
     CU_add_test(listeSuite, "lire_lignes(file, words, &nb_mots, stats)", test_lire_lignes);
+    CU_add_test(listechaineeSuite, "init_liste()", test_init_liste);
+    CU_add_test(listechaineeSuite, "iterer_tab_mots(nb_mots, words, liste->first)", test_iter_tab_mots);
+    CU_add_test(listechaineeSuite, "init_noeud(words, nb_mots, stats, liste)", test_init_noeud_0);
+    CU_add_test(listechaineeSuite, "init_noeud(words, nb_mots, stats, liste)", test_init_noeud_1);
+    CU_add_test(listechaineeSuite, "int compter_lettres(struct noeud *ptr)", test_compter_lettres_0);
+    CU_add_test(listechaineeSuite, "int compter_lettres(struct noeud *ptr)", test_compter_lettres_1);
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
     CU_cleanup_registry();

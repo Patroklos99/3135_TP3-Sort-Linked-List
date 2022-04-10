@@ -36,6 +36,7 @@ void init_noeud(char **words, int nb_mots, struct Stats *stats, Liste *liste);
  * @param nb_mots nombre de mots dans le fichier d'entrée.
  * @param words pointeur de pointeur vers leur mot correspondant.
  * @param tete struct du 1er noeud de la liste chainée.
+ * @return pointeur vers la tete des noeuds.
  * */
 struct noeud* iterer_tab_mots(int nb_mots, char **words, struct noeud *tete);
 
