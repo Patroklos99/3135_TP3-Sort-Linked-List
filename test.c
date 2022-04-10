@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <err.h>
 #include <string.h>
 #include <ctype.h>
@@ -6,7 +7,35 @@
 #include "lecturefichier.c"
 #include "statistiques.c"
 #include "debutliste.c"
-#include "structures.h"
+
+void test_lire_lignes(void){
+   int nb_mots = 3;
+   FILE *file = fopen("temp.txt", "w+");
+   fprintf(file, "MATT MATT MIMMIE");
+   struct Stats *stats = malloc(sizeof(struct Stats));  
+   rewind(file);
+   char **words = calloc(3, sizeof(char *));
+   lire_lignes(file, words, &nb_mots, stats);
+   if (NULL != file) {
+      CU_ASSERT_NOT_EQUAL(stats->mot_sans_doublons, 0); 
+      CU_ASSERT_NOT_EQUAL(stats->nb_let_freq, 0); 
+   }
+   free(words);
+}
+
+
+void test_effacer_doublons_0(void) { 
+    int val = 3;
+    int *val1 = &val;
+    FILE *file = fopen("temp.txt", "w+");
+    fprintf(file, "MATT MATT MIMMIE");
+    rewind(file);
+    char **words = calloc(3, sizeof(char *));
+    placer_mots_tab(file, words);
+    CU_ASSERT_EQUAL((uintptr_t)effacer_doublons(val1,words), 2);
+    free(words);
+    fclose(file);
+}
 
 void test_placer_mots_tab_0(void) { 
     FILE *file = fopen("temp.txt", "w+");
@@ -14,9 +43,6 @@ void test_placer_mots_tab_0(void) {
     rewind(file);
     char **words = calloc(3, sizeof(char *));
     CU_ASSERT_EQUAL(placer_mots_tab(file, words), 1);
-    for (int i = 0; i < 3; ++i) {
-      free(words[i]);
-    }
     free(words);
     fclose(file);
 }
@@ -30,9 +56,6 @@ void test_trouver_lettre_freq_0(void) {
     char **words = calloc(3, sizeof(char *));
     placer_mots_tab(file, words);
     CU_ASSERT_EQUAL(trouver_lettre_frequente((char const**)words, stats), 4);
-    for (int i = 0; i < 3; ++i) {
-      free(words[i]);
-    }
     free(words);
     free(stats); 
     fclose(file);
@@ -182,32 +205,35 @@ void test_nbr_arg_2(void) {
 int main(void) {
     if (CU_initialize_registry() != CUE_SUCCESS)
         errx(EXIT_FAILURE, "can't initialize test registry");
-    CU_pSuite facSuite = CU_add_suite("fac", NULL, NULL);
+    CU_pSuite lectureSuite = CU_add_suite("lecture", NULL, NULL);
     CU_pSuite statsSuite = CU_add_suite("stats", NULL, NULL);
+    CU_pSuite listeSuite = CU_add_suite("liste", NULL, NULL);
     if (CU_get_error() != CUE_SUCCESS)
         errx(EXIT_FAILURE, "%s", CU_get_error_msg());
-    CU_add_test(facSuite, "valider_nbr_args0(1)", test_nbr_arg_0);
-    CU_add_test(facSuite, "valider_nbr_args0(2)", test_nbr_arg_1);
-    CU_add_test(facSuite, "valider_nbr_args0(3)", test_nbr_arg_2);
-    CU_add_test(facSuite, "valider_nbr_args1(4)", test_nbr_arg1_0);
-    CU_add_test(facSuite, "valider_nbr_args1(5)", test_nbr_arg1_1);
-    CU_add_test(facSuite, "valider_arg_invalide(4, argv)", test_arg_invalide_0);
-    CU_add_test(facSuite, "valider_arg_invalide(4, argv)", test_arg_invalide_1);
-    CU_add_test(facSuite, "valider_fichier_existe(file)", test_fichier_existe_0);
-    CU_add_test(facSuite, "valider_fichier_existe(file)", test_fichier_existe_1);
-    CU_add_test(facSuite, "compter_lignes(file)", test_compter_lignes_0);
-    CU_add_test(facSuite, "compter_lignes(file)", test_compter_lignes_1);
-    CU_add_test(facSuite, "trouver_size_fichier(file, stats)", test_trouver_size_0);
-    CU_add_test(facSuite, "trouver_size_fichier(file, stats)", test_trouver_size_1);
-    CU_add_test(facSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_0);
-    CU_add_test(facSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_1);
-    CU_add_test(facSuite, "lire_fichier(argv, 2)", test_lire_fichier);
+    CU_add_test(lectureSuite, "valider_nbr_args0(1)", test_nbr_arg_0);
+    CU_add_test(lectureSuite, "valider_nbr_args0(2)", test_nbr_arg_1);
+    CU_add_test(lectureSuite, "valider_nbr_args0(3)", test_nbr_arg_2);
+    CU_add_test(lectureSuite, "valider_nbr_args1(4)", test_nbr_arg1_0);
+    CU_add_test(lectureSuite, "valider_nbr_args1(5)", test_nbr_arg1_1);
+    CU_add_test(lectureSuite, "valider_arg_invalide(4, argv)", test_arg_invalide_0);
+    CU_add_test(lectureSuite, "valider_arg_invalide(4, argv)", test_arg_invalide_1);
+    CU_add_test(lectureSuite, "valider_fichier_existe(file)", test_fichier_existe_0);
+    CU_add_test(lectureSuite, "valider_fichier_existe(file)", test_fichier_existe_1);
+    CU_add_test(lectureSuite, "compter_lignes(file)", test_compter_lignes_0);
+    CU_add_test(lectureSuite, "compter_lignes(file)", test_compter_lignes_1);
+    CU_add_test(lectureSuite, "trouver_size_fichier(file, stats)", test_trouver_size_0);
+    CU_add_test(lectureSuite, "trouver_size_fichier(file, stats)", test_trouver_size_1);
+    CU_add_test(lectureSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_0);
+    CU_add_test(lectureSuite, "trouver_nb_mots(file, stats)", test_trouver_nb_mots_1);
+    CU_add_test(lectureSuite, "lire_fichier(argv, 2)", test_lire_fichier);
     CU_add_test(statsSuite, "ecrire_stats(file, stats)", test_ecrire_stats_0);
     CU_add_test(statsSuite, "ecrire_stats(file, stats)", test_ecrire_stats_1);
     CU_add_test(statsSuite, "stub_arg", test_arg_stats_0);
     CU_add_test(statsSuite, "stub_arg", test_arg_stats_1);
-    CU_add_test(statsSuite, "trouver_lettre_frequente((char const**)words, stats)", test_trouver_lettre_freq_0);
-    CU_add_test(statsSuite, "placer_mots_tab(file, words)", test_placer_mots_tab_0);
+    CU_add_test(listeSuite, "trouver_lettre_frequente((char const**)words, stats)", test_trouver_lettre_freq_0);
+    CU_add_test(listeSuite, "placer_mots_tab(file, words)", test_placer_mots_tab_0);
+    CU_add_test(listeSuite, "effacer_doublons(&val, words)", test_effacer_doublons_0);
+    CU_add_test(listeSuite, "lire_lignes(file, words, &nb_mots, stats)", test_lire_lignes);
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
     CU_cleanup_registry();
