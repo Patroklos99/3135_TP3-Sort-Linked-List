@@ -5,6 +5,38 @@
 #include <CUnit/Basic.h>
 #include "lecturefichier.c"
 #include "statistiques.c"
+#include "debutliste.c"
+#include "structures.h"
+
+void test_placer_mots_tab_0(void) { 
+    FILE *file = fopen("temp.txt", "w+");
+    fprintf(file, "MATT GEORGE MIMMIE");
+    rewind(file);
+    char **words = calloc(3, sizeof(char *));
+    CU_ASSERT_EQUAL(placer_mots_tab(file, words), 1);
+    for (int i = 0; i < 3; ++i) {
+      free(words[i]);
+    }
+    free(words);
+    fclose(file);
+}
+
+void test_trouver_lettre_freq_0(void) { 
+    FILE *file = fopen("temp.txt", "w+");
+    fprintf(file, "MATT GEORGE MIMMIE");
+    struct Stats *stats = malloc(sizeof(struct Stats));
+    stats->mot_sans_doublons = 3;
+    rewind(file);
+    char **words = calloc(3, sizeof(char *));
+    placer_mots_tab(file, words);
+    CU_ASSERT_EQUAL(trouver_lettre_frequente((char const**)words, stats), 4);
+    for (int i = 0; i < 3; ++i) {
+      free(words[i]);
+    }
+    free(words);
+    free(stats); 
+    fclose(file);
+}
 
 int stub_arg (int val){
 if (val == 0) {
@@ -174,6 +206,8 @@ int main(void) {
     CU_add_test(statsSuite, "ecrire_stats(file, stats)", test_ecrire_stats_1);
     CU_add_test(statsSuite, "stub_arg", test_arg_stats_0);
     CU_add_test(statsSuite, "stub_arg", test_arg_stats_1);
+    CU_add_test(statsSuite, "trouver_lettre_frequente((char const**)words, stats)", test_trouver_lettre_freq_0);
+    CU_add_test(statsSuite, "placer_mots_tab(file, words)", test_placer_mots_tab_0);
     CU_basic_set_mode(CU_BRM_VERBOSE);
     CU_basic_run_tests();
     CU_cleanup_registry();

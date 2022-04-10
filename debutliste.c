@@ -45,21 +45,24 @@ int effacer_doublons(int *nb_mots, char **words) {
    return *nb_mots;
 }
 
-void placer_mots_tabs(char ligne[80], char **words, int *position) {
-   char *word = strtok(ligne, " ,.-\n");
-   while (word != NULL) {
-      words[(*position)++] = strdup(word);
-      word = strtok(NULL, " ,.-\n");
+int placer_mots_tab(FILE *file, char **words) {
+   int position = 0;
+   char ligne[80];
+   while (fgets(ligne, 80, file)) {
+      char *word = strtok(ligne, " ,.-\n");
+      while (word != NULL) {
+         words[position++] = strdup(word);
+         word = strtok(NULL, " ,.-\n");
+      }
    }
+   return position != 0;
 }
 
 void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats) {
-   int position = 0;
-   char ligne[80];
-   while (fgets(ligne, 80, file))
-      placer_mots_tabs(ligne, words, &position);
-   stats->mot_sans_doublons = effacer_doublons(nb_mots, words);
-   stats->nb_let_freq = trouver_lettre_frequente((char const **) words, stats);
+   if (placer_mots_tab(file, words)) {
+      stats->mot_sans_doublons = effacer_doublons(nb_mots, words);
+      stats->nb_let_freq = trouver_lettre_frequente((char const **) words,
+                                                    stats);
+   }
    fclose(file);
 }
- 

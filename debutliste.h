@@ -16,11 +16,11 @@ void lire_lignes(FILE *file, char **words, int *nb_mots, struct Stats *stats);
 /*
  * Place chaque mot dans le pointeur de pointeurs (**words).
  *
- * @param ligne Ligne lu.
+ * @param *file pointeur du fichier à lire.
  * @param words pointeur de pointeur vers leur mot correspondant.
- * @param positon Position correspondante dans **words.
+ * @return valeur de verité si des mots ont été rajoutés.
  * */
-void placer_mots_tabs(char ligne[80], char **words, int *position);
+int placer_mots_tab(FILE *file, char **words);
 
 /*
  * Efface les doublons dans **words.
