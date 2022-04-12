@@ -29,7 +29,6 @@ tri1.o: tri.c
 test:	clean compile_test
 	gcc -g --coverage -std=c11 -o test test.c -lcunit	
 	./test 
-##	valgrind -s --leak-check=full ./test 
 	gcov test.c
 ##	lcov -c -d . -o my.info
 ##	genhtml -o results/ my.info
