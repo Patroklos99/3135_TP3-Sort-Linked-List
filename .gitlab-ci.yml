@@ -4,15 +4,16 @@ before_script:
     - mkdir -p /tmp/local
     - bash /tmp/bats/install.sh /tmp/local
     - export PATH=$PATH:/tmp/local/bin
+    - apt-get install libcunit1 libcunit1-doc libcunit1-dev
 
 build:
     stage: build
     script:
         - make
 
-#test:
-#    stage: test
-#    script:
-#        - make test"
+test:
+    stage: test
+    script:
+        - make test
 
 

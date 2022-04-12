@@ -27,7 +27,7 @@ tri1.o: tri.c
 	gcc -g -Wall -Wextra --coverage -std=c11 -c tri.c
 
 test:	clean compile_test
-	gcc -g --coverage -o test test.c -lcunit	
+	gcc -g --coverage -std=c11 -o test test.c -lcunit	
 	./test 
 ##	valgrind -s --leak-check=full ./test 
 	gcov test.c
