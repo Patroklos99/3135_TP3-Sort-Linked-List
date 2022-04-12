@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe tri.c
+ *  Represente la classe main, de plusieurs autres classes, contenant le main.
+ *  Ce projet execute la lecture d'un fichier comme argument, fait des traitement et affiche les mots correspondants.
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>

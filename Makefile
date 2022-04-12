@@ -36,6 +36,6 @@ test:	clean compile_test
 html: README.md
 	pandoc -s --self-contained --css=./misc/github-pandoc.css --metadata title=" " README.md -o README.html
 clean:
-	rm -f *.o *.html *.gcov *.gcda *.gcno tri test temp.txt 
+	rm -rf *.o *.html *.gcov *.gcda *.gcno tri test temp.txt my.info results
 link: compile
 	gcc *.o -o tri
