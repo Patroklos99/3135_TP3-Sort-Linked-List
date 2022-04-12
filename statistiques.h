@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe statistiques.h
+ *  Represente la classe statistiques.h contenant les fonctions en lien avec 
+ *  les statistiques demandees et ses methodes correspondantes.
+ */
+
 #ifndef STATISTIQUES_H
 #define STATISTIQUES_H
 #define err4 "Erreur lors de l'ecriture du fichier de sortie. Fin du programme."

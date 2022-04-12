@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe lecturefichier.h
+ *  Represente la classe lecturefichier.h contenant les fonctions en lien avec 
+ *  la lecture du fichier et ses methodes correspondantes.
+ */
+
 #ifndef LECTUREFICHIER_H
 #define LECTUREFICHIER_H
 #define err0 "Argument fichier a lire ou a ecrire manquant. Fin du programme."

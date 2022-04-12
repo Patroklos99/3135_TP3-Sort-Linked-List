@@ -4,7 +4,7 @@
  *  Cours: INF3135 TP3 UQAM
  *  Session: Hiver 2022
  *
- *  Classe tri.c
+ *  Classe test.c
  *  Represente la classe test, contenant tous les test correspondants aux fonctions des fichiers .c dans ce repertoire.  
  */
 

@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe listechainee.h
+ *  Represente la classe listechainee.h contenant les fonctions en lien avec 
+ *  la listechainee et ses methodes correspondantes.
+ */
+
 #ifndef LISTECHAINEE_H
 #define LISTECHAINEE_H
 #include <stdio.h>

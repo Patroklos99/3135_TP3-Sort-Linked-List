@@ -1,3 +1,13 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe structures.h
+ *  Represente la classe structures.h contenant la structures stats utilisee toutes les autres classes.
+ */
+
 #ifndef STRUCTURES_H
 #define STRUCTURES_H
 

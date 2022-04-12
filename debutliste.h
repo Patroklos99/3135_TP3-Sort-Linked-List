@@ -1,3 +1,14 @@
+/**
+ *  Auteur: Renzo Arturo Salcedo
+ *  Code Permanent: SALR02089408
+ *  Cours: INF3135 TP3 UQAM
+ *  Session: Hiver 2022
+ *
+ *  Classe debutliste.h
+ *  Represente la classe debutliste.h contenant les fonctions en lien avec la 
+ *  structure liste qui contient les noeuds.
+ */
+
 #ifndef DEBUTLISTE_H
 #define DEBUTLISTE_H
 #include <stdio.h>
