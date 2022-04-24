@@ -1,17 +1,16 @@
+.PHONY: link clean
+CFLAGS:=-g -Wall -Wextra -std=c11
+
 Make:	clean link
 compile: listechainee.o debutliste.o lecturefichier.o statistiques.o tri.o
 
-listechainee.o: listechainee.c listechainee.h 
-	gcc -g -Wall -Wextra -std=c11 -c listechainee.c
-debutliste.o: debutliste.c debutliste.h 
-	gcc -g -Wall -Wextra -std=c11 -c debutliste.c
-lecturefichier.o: lecturefichier.c lecturefichier.h 
-	gcc -g -Wall -Wextra -std=c11 -c lecturefichier.c
-statistiques.o: statistiques.c statistiques.h 
-	gcc -g -Wall -Wextra -std=c11 -c statistiques.c
-tri.o: tri.c  
-	gcc -g -Wall -Wextra -std=c11 -c tri.c
-
+#listechainee.o: listechainee.c listechainee.h 
+#debutliste.o: debutliste.c debutliste.h 
+#lecturefichier.o: lecturefichier.c lecturefichier.h 
+#statistiques.o: statistiques.c statistiques.h 
+#tri.o: tri.c  
+#toutes les lignes en haut remplacees par la ligne en bas
+%.o: %.c %h
 
 compile_test: listechainee1.o debutliste1.o lecturefichier1.o statistiques1.o tri1.o
 
