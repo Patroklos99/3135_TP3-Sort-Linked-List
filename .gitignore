@@ -1,8 +1,6 @@
 *.swp
 *.html
 tri
-entree.txt
-*.txt
 ftest
 *.o
 *.out
@@ -12,3 +10,5 @@ test
 *.gcov
 my.info
 results
+liste.txt
+stats.txt
