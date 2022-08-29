@@ -4,6 +4,10 @@
 
 Projet(suite III) d'introduction au langage C. Ce projet execute la lecture d'un fichier comme argument et fait l'affichage trié (sans doublons) du fichier lu.
 
+<img src="https://user-images.githubusercontent.com/96098657/187114076-de39d312-0430-47d7-aea2-e435ad265a36.png" alt="drawing" width="600"/>
+<img src="https://user-images.githubusercontent.com/96098657/187114252-afa30edc-9f46-4f09-b83e-bf749a4a9efe.png" alt="drawing" width="600"/>
+
+
 Le fichier lu sera passé comme argument et traité ensuite.
 L'option -S sera passé comme argument suivie du *.txt de sortie.
 La redirection n'est pas supportée.
@@ -88,7 +92,7 @@ test:   clean compile_test
 ## Dépendances
 
 * [GCC](https://gcc.gnu.org/).
-* [Bats](https://github.com/bats-core/bats-core). A verifier
+* [Bats](https://github.com/bats-core/bats-core). 
 * [Pandoc](https://pandoc.org/).
 * [Make](https://www.gnu.org/software/make/).
 * [CUnit](http://cunit.sourceforge.net/).
