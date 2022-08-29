@@ -31,7 +31,7 @@ Lien vers le [README du travail](https://gitlab.info.uqam.ca/salcedo_salcedo.ren
 
 ## Auteur
 
-Renzo Arturo Salcedo (SALR02089408).
+Renzo Arturo Salcedo (SALR02089408)
 
 ## Fonctionnement
 
